@@ -1,0 +1,137 @@
+#include<iostream>
+#define MAX 5
+
+using namespace std;
+
+class Queue
+{
+private:
+    int* arr;
+    int Size;
+    int capacity;
+    int Front;
+    int rear;
+
+public:
+    Queue();
+
+    void EnQueue(int item);
+    int DeQueue();
+    int peek();
+    int IsFull();
+    int IsEmpty();
+    void display();
+
+    int getFront(){
+        return Front;
+    }
+    int getRear(){
+        return rear;
+    }
+    int getSize(){
+        return Size;
+    }
+};
+
+Queue::Queue()
+{
+    arr = new int[MAX];
+    
+    for(int i = 0; i < MAX ; i++){
+        
+    }
+    Size = 0;
+    capacity = MAX;
+    Front = 0;
+    rear = -1;
+}
+
+int Queue::IsFull()
+{
+    return Size == capacity;
+}
+
+int Queue::IsEmpty()
+{
+    return Size == 0;
+}
+
+void Queue::EnQueue(int item)
+{
+    if(IsFull()){
+        cout << "overflow" << endl;
+    }
+    else{
+        rear = (rear + 1) % capacity;
+        arr[rear] = item;
+        Size++;
+        
+    }
+}
+
+int Queue::DeQueue()
+{
+    if(IsEmpty()){
+        cout << "underflow" << endl;
+    }
+    else{
+        int item = arr[Front];
+        Front = (Front + 1) % capacity;
+        Size--;
+
+        return item;
+    }
+}
+
+int Queue::peek()
+{
+    return arr[Front];
+}
+
+void Queue::display()
+{
+    //cout << Size << " " << Front;
+    int copy_front = Front;
+    do{
+        cout << arr[copy_front] << " ";
+        copy_front = (copy_front + 1) % capacity;
+        
+    }while(arr[copy_front] != NULL);
+}
+
+void Input_queue(Queue* Q)
+{
+    int n = 0;
+    cout << "nhap so luong phan tu can them: ";
+    cin >> n;
+    
+    int item = 0;
+    for(int i = 0; i < n; i++){
+        cin >> item;
+        (*Q).EnQueue(item);
+    }
+}
+
+void remove_elements_in_Queue(Queue* Q)
+{
+    int n = 0;
+    cout << "nhap so phan tu xoa di: ";
+    cin >> n;
+
+    for(int i = 0; i < n; i++){
+        (*Q).DeQueue();
+    }
+}
+
+int main()
+{
+    Queue Q;
+    Input_queue(&Q);
+    //cout << Q.getFront() << " " << Q. getRear();
+    Q.display();
+    remove_elements_in_Queue(&Q);
+    //cout << Q.getFront();
+    Q.display();
+    Input_queue(&Q);
+    Q.display();
+}
