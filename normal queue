@@ -15,12 +15,13 @@ private:
 public:
     Queue();
 
-    void EnQueue(int item);
+    void EnQueue();
     int DeQueue();
     int peek();
     int IsFull();
     int IsEmpty();
     void display();
+    Queue create_a_queue();
 
     int getFront(){
         return Front;
@@ -31,14 +32,15 @@ public:
     int getSize(){
         return Size;
     }
+
 };
 
 Queue::Queue()
 {
     arr = new int[MAX];
-    
+
     for(int i = 0; i < MAX ; i++){
-        
+        arr[i] = 0;
     }
     Size = 0;
     capacity = MAX;
@@ -56,31 +58,44 @@ int Queue::IsEmpty()
     return Size == 0;
 }
 
-void Queue::EnQueue(int item)
+void Queue::EnQueue()
 {
-    if(IsFull()){
-        cout << "overflow" << endl;
+    cout << "nhap cac phan tu can them vao: " << endl;
+    int item = 0;
+    while(cin >> item){
+        if(IsFull()){
+            cout << "overflow" << endl;
+            break;
+        }
+        else{
+            rear = (rear + 1) % capacity;
+            arr[rear] = item;
+            Size++;
+        }
     }
-    else{
-        rear = (rear + 1) % capacity;
-        arr[rear] = item;
-        Size++;
-        
-    }
+    cin.clear();
+    cin.ignore();
+
 }
 
 int Queue::DeQueue()
 {
-    if(IsEmpty()){
-        cout << "underflow" << endl;
+    int rmv = 0;
+    int item = 0;
+    cout << "nhap so phan tu loai ra: ";
+    cin >> rmv;
+    for(int i = 0 ; i < rmv; i++){
+        if(IsEmpty()){
+            cout << "underflow" << endl;
+        }
+        else{
+            item = arr[Front];
+            arr[Front] = 0;
+            Front = (Front + 1) % capacity;
+            Size--;
+        }
     }
-    else{
-        int item = arr[Front];
-        Front = (Front + 1) % capacity;
-        Size--;
-
-        return item;
-    }
+    return item;
 }
 
 int Queue::peek()
@@ -88,50 +103,32 @@ int Queue::peek()
     return arr[Front];
 }
 
+
 void Queue::display()
 {
     //cout << Size << " " << Front;
     int copy_front = Front;
+    int dem = 0;
     do{
         cout << arr[copy_front] << " ";
         copy_front = (copy_front + 1) % capacity;
-        
-    }while(arr[copy_front] != NULL);
+        dem++;
+    }while((arr[copy_front] != 0) && (dem != capacity));
+    cout << endl;
+
 }
 
-void Input_queue(Queue* Q)
-{
-    int n = 0;
-    cout << "nhap so luong phan tu can them: ";
-    cin >> n;
-    
-    int item = 0;
-    for(int i = 0; i < n; i++){
-        cin >> item;
-        (*Q).EnQueue(item);
-    }
-}
-
-void remove_elements_in_Queue(Queue* Q)
-{
-    int n = 0;
-    cout << "nhap so phan tu xoa di: ";
-    cin >> n;
-
-    for(int i = 0; i < n; i++){
-        (*Q).DeQueue();
-    }
-}
 
 int main()
 {
     Queue Q;
-    Input_queue(&Q);
-    //cout << Q.getFront() << " " << Q. getRear();
+    Q.EnQueue();
     Q.display();
-    remove_elements_in_Queue(&Q);
-    //cout << Q.getFront();
+
+    Q.DeQueue();
     Q.display();
-    Input_queue(&Q);
+
+    Q.EnQueue();
     Q.display();
+    //Q.display();
 }
